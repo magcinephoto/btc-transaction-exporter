@@ -41,7 +41,6 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { fetchMEData } from '../lib/magiceden';
 import { targetMempoolExportData, ExportDataCollection } from '../lib/mempool';
 
 defineProps<{ msg: string }>();
@@ -49,11 +48,6 @@ defineProps<{ msg: string }>();
 const loading = ref(false);
 const taprootAddress = ref('');
 const bitcoinAddress = ref('');
-
-function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 const buttonText = computed(() => loading.value ? 'Loading...' : 'Export Transaction CSV' );
 
 async function exportCsv(exportDataCollection: ExportDataCollection) {
