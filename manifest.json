@@ -1,6 +1,11 @@
 {
   "manifest_version": 3,
   "name": "Btc Transaction Exporter",
-  "version": "1.0.0",
-  "action": { "default_popup": "index.html" }
+  "description": "Export csv bitcoin transactions of specific wallet address",
+  "host_permissions": ["*://*.api-mainnet.magiceden.io/"],
+  "version": "1.0",
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "logo.png"
+  }
 }
