@@ -1,8 +1,8 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 
 export const getRequest = async (url: string) => {
   try {
-    const { data } = await axios.get<AxiosResponse>(url);
+    const { data } = await axios.get(url);
     return data;
   } catch (error) {
     console.error(error);

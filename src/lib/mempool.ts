@@ -1,5 +1,4 @@
-import { getRequest } from './client.ts'
-import * as fs from 'fs';
+import { getRequest } from './client';
 
 const URL_BASE = 'https://mempool.space';
 const SATS_BTC = 100000000;
@@ -18,7 +17,7 @@ function formatDate(date: Date) {
 async function fetchMempoolTransactions(address: string) {
   const result: any[] = [];
   const initialResponse = await getRequest(`${URL_BASE}/api/address/${address}/txs`);
-  if (initialResponse.length === 0) {
+  if (initialResponse && initialResponse.length === 0) {
     return result;
   }
 
@@ -45,12 +44,9 @@ async function fetchMempoolTransactions(address: string) {
 
 export const targetMempoolTransactions = async (address: string) => {
   const transactions = await fetchMempoolTransactions(address);
-  //const fileStream = fs.createWriteStream(outputFileName, {encoding: 'utf8'});
-  //fileStream.write('timestamp,tx,address,vin,vout,diff,myaddress,date,description,indiff,outdiff/gasfee,ordContentType,ordContentText,ordInscriptionUrl\n');
-
   const keys = "timestamp,tx,address,vin,vout,diff".split(',')
 
-  let result = [];
+  let result: any[] = [];
   for (const inputData of transactions) {
     convertTransactionData(inputData, address, '', result);
   }
