@@ -4,20 +4,20 @@ const URL_BASE = 'https://mempool.space';
 const SATS_BTC = 100000000;
 const ORD_ENVELOP_HEADER = 'OP_0 OP_IF OP_PUSHBYTES_3 6f7264 OP_PUSHBYTES_1 01';
 
-interface VinElement {
+type VinElement = {
   prevout: {
       scriptpubkey_address: string;
       value: number;
   };
   inner_witnessscript_asm?: string;
-}
+};
 
-interface VoutElement {
+type VoutElement = {
   scriptpubkey_address: string;
   value: number;
-}
+};
 
-interface TransactionData {
+type TransactionData = {
   txid: string;
   fee: number;
   status: {
@@ -25,15 +25,32 @@ interface TransactionData {
   };
   vin: VinElement[];
   vout: VoutElement[];
-}
+};
 
-interface txValueByAddress {
+type txValueByAddress = {
   [address: string]: {
     vin: number,
     vout: number,
     witnessscript: string
   }
-}
+};
+
+type ExportData = {
+  timestamp: string;
+  txid: string;
+  txUrl: string;
+  address: string;
+  vin: number;
+  vout: number;
+  vdiff: number;
+  myAddress: '*' | '';
+  date: string;
+  inDiff: number;
+  outDiffOrFee: number;
+  ordContentType: string;
+  ordContentText: string;
+  ordInscriptionUrl: string;
+};
 
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -113,19 +130,19 @@ async function fetchMempoolTransactions(address: string) {
   return result;
 }
 
-export const targetMempoolTransactionValues = async (address: string) => {
+export const targetMempoolExportData = async (address: string) => {
   const transactions = await fetchMempoolTransactions(address);
   //const keys = "timestamp,tx,address,vin,vout,diff".split(',')
 
-  const result: any[] = [];
+  const result: string[][] = [];
   for (const inputData of transactions) {
-    convertTransactionData(inputData, address, '', result);
+    convertToExportData(inputData, address, '', result);
   }
 
   return result;
 }
 
-const convertTransactionData = (transactionData: any, mainAddress: string, subAddress: string, result: any[]) => {
+const convertToExportData = (transactionData: any, mainAddress: string, subAddress: string, result: any[]) => {
   const transactionId = transactionData.txid;
   const gasFee = transactionData.fee;
   const blockTime = transactionData.status.block_time;
@@ -166,45 +183,35 @@ const convertTransactionData = (transactionData: any, mainAddress: string, subAd
     const inDiff = diff >= 0 ? diff : 0;
     const outDiff = diff < 0 ? Math.abs(diff) : 0;
     const fee = gasFee;
-    const myAddress = ownAddresses.includes(address) ? 'O' : '';
+    const myAddress = ownAddresses.includes(address) ? '*' : '';
     const ordContentType = ordContentTypeText(txValue.witnessscript);
     const ordContentText = ordContentTextData(txValue.witnessscript);
     const ordInscriptionUrl = ordInscriptionMEUrl(transactionId, txValue.witnessscript);
 
+
+    const exportData: ExportData = {
+      timestamp: timeStampString,
+      txid: transactionId,
+      txUrl: txUrl,
+      address: address,
+      vin: txValue.vin/SATS_BTC,
+      vout: txValue.vout/SATS_BTC,
+      vdiff: diff/SATS_BTC,
+      myAddress: myAddress,
+      date: date,
+      inDiff: inDiff/SATS_BTC,
+      outDiffOrFee: (outDiff - fee)/SATS_BTC,
+      ordContentType: ordContentType,
+      ordContentText: ordContentText,
+      ordInscriptionUrl: ordInscriptionUrl,
+    }
+    
     if (fee > 0 && address === mainAddress && diff < 0) {
       //const gasDescription = `GasFee: ${description}`;
-      result.push([
-        timeStampString,
-        txUrl,
-        address,
-        txValue.vin/SATS_BTC,
-        txValue.vout/SATS_BTC,
-        diff/SATS_BTC,
-        myAddress,
-        date,
-        inDiff/SATS_BTC,
-        (outDiff - fee)/SATS_BTC,
-        ordContentType,
-        ordContentText,
-        ordInscriptionUrl,
-      ]);
+      result.push(Object.values(exportData));
       //fileStream.write(`${timeStampString},${txUrl},${address},,,,${myAddress},${date},${gasDescription},${0},${fee/SATS_BTC}\n`);
     } else {
-      result.push([
-        timeStampString,
-        txUrl,
-        address,
-        txValue.vin/SATS_BTC,
-        txValue.vout/SATS_BTC,
-        diff/SATS_BTC,
-        myAddress,
-        date,
-        inDiff/SATS_BTC,
-        (outDiff - fee)/SATS_BTC,
-        ordContentType,
-        ordContentText,
-        ordInscriptionUrl,
-      ]);
+      result.push(Object.values(exportData));
     }
   }
 };

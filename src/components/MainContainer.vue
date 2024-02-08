@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { fetchMEData } from '../lib/magiceden';
-import { targetMempoolTransactionValues } from '../lib/mempool';
+import { targetMempoolExportData } from '../lib/mempool';
 
 defineProps<{ msg: string }>();
 
@@ -75,7 +75,7 @@ async function exportCsv(transactions: string[][]) {
 
 async function execMainProcess() {
   loading.value = true;
-  const csvStringArray = await targetMempoolTransactionValues(taprootAddress.value);
+  const csvStringArray: string[][] = await targetMempoolExportData(taprootAddress.value);
   await exportCsv(csvStringArray);
   loading.value = false;
 }
