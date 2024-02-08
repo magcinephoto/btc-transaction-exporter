@@ -1,10 +1,10 @@
 <template>
   <div
-    class="flex flex-col container justify-center items-center my-8 mx-auto">
+    class="flex flex-col container justify-center items-center my-8 mx-auto px-5">
 
     <h1 class="text-xl font-medium text-white mb-4">{{ msg }}</h1>
 
-    <form class="max-w-md mx-auto">
+    <form class="mx-auto">
       <div class="mb-5">
         <label for="taproot_address" class="block pl-0 mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">Taproot Address</label>
         <input
@@ -31,7 +31,7 @@
         :disabled="loading"
         type="button"
         @click="execMainProcess"
-        class="flex justify-center bg-slate-700 hover:bg-slate-600 text-white rounded px-6 py-4 focus:outline-none disabled:bg-slate-400 disabled:hover:bg-slate-400 disabled:opacity-75">
+        class="flex justify-center font-medium bg-slate-700 hover:bg-slate-600 text-white rounded px-6 py-4 focus:outline-none disabled:bg-slate-400 disabled:hover:bg-slate-400 disabled:opacity-75">
           <div
             v-if="loading"
             class="mr-3 animate-spin h-6 w-6 border-2 border-white-500 rounded-full border-t-transparent" />
