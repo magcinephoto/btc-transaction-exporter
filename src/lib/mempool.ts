@@ -52,14 +52,14 @@ async function fetchMempoolTransactions(address: string) {
   }
 
   while (lastSeenTxid) {
-    const chainResponse = await getRequest(`${URL_BASE}/api/address/${address}/txs/chain/${lastSeenTxid}`);
+    const chainResponse: TransactionData[] = await getRequest(`${URL_BASE}/api/address/${address}/txs/chain/${lastSeenTxid}`);
     result.push(...chainResponse);
 
     if (chainResponse.length === 0 || chainResponse.length < 25) {
       break;
     }
 
-    lastSeenTxid = chainResponse.at(-1).txid;
+    lastSeenTxid = chainResponse.at(-1)!.txid;
     await sleep(1000);
   }
   return result;
