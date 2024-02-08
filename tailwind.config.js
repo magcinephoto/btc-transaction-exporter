@@ -1,4 +1,3 @@
-import checker from 'vite-plugin-checker'
 export default {
   content: [
     "./index.html",
@@ -7,9 +6,5 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [
-    checker({
-      typescript: true,
-    }),
-  ],
+  plugins: []
 }
