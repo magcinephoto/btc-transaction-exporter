@@ -26,6 +26,14 @@ interface TransactionData {
   vout: VoutElement[];
 }
 
+interface txValueByAddress {
+  [address: string]: {
+    vin: number,
+    vout: number,
+    witnessscript: string
+  }
+}
+
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -35,6 +43,28 @@ function formatDate(date: Date) {
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
+}
+
+function ordInscriptionMEUrl(txid: string, witnessscript: string) {
+  const contentText = ordEnvelopeText(witnessscript);
+  if(contentText === '') return '';
+
+  // TODO: Be avaiable for tparent-child inscription
+  return `https://magiceden.io/ordinals/item-details/${txid}i0`;
+}
+
+function ordContentTypeText(witnessscript: string) {
+  const contentText = ordEnvelopeText(witnessscript);
+  if(contentText === '') return '';
+
+  const ordContentTypeRaw = contentText.split(' ')[1];
+  return hexToUtf8(ordContentTypeRaw);
+}
+
+function ordEnvelopeText(witnessscript: string) {
+  if(!witnessscript || !witnessscript.includes(ORD_ENVELOP_HEADER)) return '';
+
+  return witnessscript.split(ORD_ENVELOP_HEADER)[1]?.trim();
 }
 
 async function fetchMempoolTransactions(address: string) {
@@ -67,9 +97,9 @@ async function fetchMempoolTransactions(address: string) {
 
 export const targetMempoolTransactionValues = async (address: string) => {
   const transactions = await fetchMempoolTransactions(address);
-  const keys = "timestamp,tx,address,vin,vout,diff".split(',')
+  //const keys = "timestamp,tx,address,vin,vout,diff".split(',')
 
-  let result: any[] = [];
+  const result: any[] = [];
   for (const inputData of transactions) {
     convertTransactionData(inputData, address, '', result);
   }
@@ -85,7 +115,7 @@ const convertTransactionData = (transactionData: any, mainAddress: string, subAd
   const timeStampString = timeStamp.toLocaleDateString('ja-JP') + ' ' + timeStamp.toLocaleTimeString('ja-JP')
   const date = formatDate(timeStamp);
   const ownAddresses = [mainAddress, subAddress];
-  const txValues: { [address: string]: { vin: number, vout: number, witnessscript: string } } = {};
+  const txValues: txValueByAddress = {};
 
   for (const vinElem of transactionData.vin) {
     const address = vinElem.prevout.scriptpubkey_address;
@@ -119,9 +149,9 @@ const convertTransactionData = (transactionData: any, mainAddress: string, subAd
     const outDiff = diff < 0 ? Math.abs(diff) : 0;
     const fee = gasFee;
     const myAddress = ownAddresses.includes(address) ? 'O' : '';
-    //const ordContentType = ordContentTypeText(txValue.witnessscript);
-    //const ordContentText = ordContentTextData(txValue.witnessscript);
-    //const ordInscriptionUrl = ordInscriptionMEUrl(transactionId, txValue.witnessscript);
+    const ordContentType = ordContentTypeText(txValue.witnessscript);
+    const ordContentText = ordContentTextData(txValue.witnessscript);
+    const ordInscriptionUrl = ordInscriptionMEUrl(transactionId, txValue.witnessscript);
 
     if (fee > 0 && address === mainAddress && diff < 0) {
       //const gasDescription = `GasFee: ${description}`;
@@ -136,6 +166,9 @@ const convertTransactionData = (transactionData: any, mainAddress: string, subAd
         date,
         inDiff/SATS_BTC,
         (outDiff - fee)/SATS_BTC,
+        ordContentType,
+        ordContentText,
+        ordInscriptionUrl,
       ]);
       //fileStream.write(`${timeStampString},${txUrl},${address},,,,${myAddress},${date},${gasDescription},${0},${fee/SATS_BTC}\n`);
     } else {
@@ -150,6 +183,9 @@ const convertTransactionData = (transactionData: any, mainAddress: string, subAd
         date,
         inDiff/SATS_BTC,
         (outDiff - fee)/SATS_BTC,
+        ordContentType,
+        ordContentText,
+        ordInscriptionUrl,
       ]);
     }
   }
