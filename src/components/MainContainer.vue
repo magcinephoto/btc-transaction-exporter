@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-//import { fetchMEData } from 'src/lib/magiceden.ts';
+import { fetchMEData } from '../lib/magiceden.ts';
 
 
 defineProps<{ msg: string }>();
