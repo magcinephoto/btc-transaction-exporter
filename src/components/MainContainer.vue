@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="flex flex-col container justify-center items-center my-8 mx-auto px-5">
-
+  <div class="flex flex-col container justify-center items-center my-8 mx-auto px-5">
     <h1 class="text-xl font-medium text-white mb-4">{{ msg }}</h1>
 
     <form class="mx-auto">
@@ -44,7 +42,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { fetchMEData } from '../lib/magiceden';
-import { targetMempoolExportData } from '../lib/mempool';
+import { targetMempoolExportData, ExportDataCollection } from '../lib/mempool';
 
 defineProps<{ msg: string }>();
 
@@ -58,9 +56,9 @@ function sleep(ms: number) {
 
 const buttonText = computed(() => loading.value ? 'Loading...' : 'Export Transaction CSV' );
 
-async function exportCsv(transactions: string[][]) {
+async function exportCsv(exportDataCollection: ExportDataCollection) {
   const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
-  const data = transactions;
+  const data = exportDataCollection;
   const csvContent = data.map(row => row.join(",")).join("\n");
   const blob = new Blob([bom, csvContent], { type: "text/csv;charset=utf-8;" });
   const url = window.URL.createObjectURL(blob);
@@ -75,8 +73,8 @@ async function exportCsv(transactions: string[][]) {
 
 async function execMainProcess() {
   loading.value = true;
-  const csvStringArray: string[][] = await targetMempoolExportData(taprootAddress.value);
-  await exportCsv(csvStringArray);
+  const exportDataCollection: ExportDataCollection = await targetMempoolExportData(taprootAddress.value);
+  await exportCsv(exportDataCollection);
   loading.value = false;
 }
 </script>

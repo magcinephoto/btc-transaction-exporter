@@ -52,6 +52,8 @@ type ExportData = {
   ordInscriptionUrl: string;
 };
 
+export type ExportDataCollection = (string | number)[][];
+
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -103,7 +105,7 @@ function ordEnvelopeText(witnessscript: string) {
 }
 
 async function fetchMempoolTransactions(address: string) {
-  const result: any[] = [];
+  const result: TransactionData[] = [];
   const initialResponse: TransactionData[] = await getRequest(`${URL_BASE}/api/address/${address}/txs`);
   if (initialResponse.length === 0) {
     return result;
@@ -131,10 +133,10 @@ async function fetchMempoolTransactions(address: string) {
 }
 
 export const targetMempoolExportData = async (address: string) => {
-  const transactions = await fetchMempoolTransactions(address);
+  const transactions: TransactionData[] = await fetchMempoolTransactions(address);
   //const keys = "timestamp,tx,address,vin,vout,diff".split(',')
 
-  const result: string[][] = [];
+  const result: ExportDataCollection = [];
   for (const inputData of transactions) {
     convertToExportData(inputData, address, '', result);
   }
@@ -142,7 +144,7 @@ export const targetMempoolExportData = async (address: string) => {
   return result;
 }
 
-const convertToExportData = (transactionData: any, mainAddress: string, subAddress: string, result: any[]) => {
+const convertToExportData = (transactionData: TransactionData, mainAddress: string, subAddress: string, result: ExportDataCollection) => {
   const transactionId = transactionData.txid;
   const gasFee = transactionData.fee;
   const blockTime = transactionData.status.block_time;
