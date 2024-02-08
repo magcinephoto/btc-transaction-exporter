@@ -44,6 +44,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { fetchMEData } from '../lib/magiceden.ts';
+import { fetchMempoolTransactions } from '../lib/mempool.ts';
 
 defineProps<{ msg: string }>();
 
@@ -57,14 +58,15 @@ function sleep(ms: number) {
 
 const buttonText = computed(() => loading.value ? 'Loading...' : 'Export Transaction CSV' );
 
-async function exportCsv() {
+async function exportCsv(transactions: any[]) {
   await sleep(4000);
   const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
-  const data = [
-    ["header1", "header2", "header3"],
-    ["row1col1", "row1col2", "row1col3"],
-    ["row2col1", "row2col2", "row2col3"],
-  ];
+
+  const header = ["txid","locktime"];
+  const data = transactions.map((transaction) => {
+    return [transaction.txid, transaction.locktime];
+  });
+  const targetData = data.unshift(header)
   const csvContent = data.map(row => row.join(",")).join("\n");
   const blob = new Blob([bom, csvContent], { type: "text/csv;charset=utf-8;" });
   const url = window.URL.createObjectURL(blob);
@@ -79,9 +81,8 @@ async function exportCsv() {
 
 async function execMainProcess() {
   loading.value = true;
-  //await exportCsv()
-  console.log(taprootAddress.value)
-  console.log(bitcoinAddress.value)
+  const transactions = await fetchMempoolTransactions(taprootAddress.value);
+  await exportCsv(transactions);
   loading.value = false;
 }
 </script>
