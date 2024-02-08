@@ -1,10 +1,12 @@
 <template>
   <h1>{{ msg }}</h1>
-  <button type="button" @click="execMainProcess">Export CSV</button>
+  <button type="button" @click="fetchMEData">Export CSV</button>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
+//import { fetchMEData } from 'src/lib/magiceden.ts';
+
 
 defineProps<{ msg: string }>();
 
