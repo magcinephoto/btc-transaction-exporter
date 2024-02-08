@@ -1,22 +1,24 @@
 <template>
-  <h1 class="text-xl font-medium text-white">{{ msg }}</h1>
+  <div
+    class="flex flex-col justify-center items-center m-5">
 
-  <div className="flex justify-center" aria-label="読み込み中">
-    <div className="animate-spin h-10 w-10 border-4 border-blue-500 rounded-full border-t-transparent"></div>
+    <h1 class="text-xl font-medium text-white mb-4">{{ msg }}</h1>
+
+    <button
+      :disabled="loading"
+      type="button"
+      @click="execMainProcess"
+      class="flex justify-center bg-slate-700 hover:bg-slate-600 text-white rounded px-6 py-4 focus:outline-none disabled:bg-slate-400 disabled:hover:bg-slate-400 disabled:opacity-75">
+        <div
+          v-if="loading"
+          class="mr-3 animate-spin h-6 w-6 border-2 border-cyan-500 rounded-full border-t-transparent" />
+        <span>{{ buttonText }}</span>
+    </button>
   </div>
-
-  <button
-    :disabled="loading"
-    type="button"
-    @click="execMainProcess"
-    class="bg-slate-700 hover:bg-slate-600 text-white rounded px-4 py-2 focus:outline-none disabled:bg-slate-400 disabled:hover:bg-slate-400 disabled:opacity-75"
-  >
-    Export Transaction CSV
-  </button>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { fetchMEData } from '../lib/magiceden.ts';
 
 defineProps<{ msg: string }>();
@@ -26,6 +28,8 @@ const loading = ref(false);
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+const buttonText = computed(() => loading.value ? 'Loading...' : 'Export Transaction CSV' );
 
 async function execMainProcess() {
   loading.value = true;
