@@ -2,6 +2,7 @@ import { getRequest } from './client';
 
 const URL_BASE = 'https://mempool.space';
 const SATS_BTC = 100000000;
+const ORD_ENVELOP_HEADER = 'OP_0 OP_IF OP_PUSHBYTES_3 6f7264 OP_PUSHBYTES_1 01';
 
 interface VinElement {
   prevout: {
@@ -43,6 +44,23 @@ function formatDate(date: Date) {
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
+}
+
+function hexToUtf8(hex: string) {
+  let utf8 = "";
+  for (let i = 0; i < hex.length; i += 2) {
+    utf8 += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+  }
+  return utf8;
+}
+
+function ordContentTextData(witnessscript: string) {
+  const contentText = ordEnvelopeText(witnessscript);
+  const contentTypeText = ordContentTypeText(witnessscript);
+  if(contentText === '' || (contentText && !contentTypeText.includes('text/plain'))) return '';
+
+  const ordContentTextRaw = contentText.split(' ')[4];
+  return `"${hexToUtf8(ordContentTextRaw).replace(/"/g, '""')}"`;
 }
 
 function ordInscriptionMEUrl(txid: string, witnessscript: string) {
