@@ -3,6 +3,29 @@ import { getRequest } from './client';
 const URL_BASE = 'https://mempool.space';
 const SATS_BTC = 100000000;
 
+interface VinElement {
+  prevout: {
+      scriptpubkey_address: string;
+      value: number;
+  };
+  inner_witnessscript_asm?: string;
+}
+
+interface VoutElement {
+  scriptpubkey_address: string;
+  value: number;
+}
+
+interface TransactionData {
+  txid: string;
+  fee: number;
+  status: {
+    block_time: number;
+  };
+  vin: VinElement[];
+  vout: VoutElement[];
+}
+
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
@@ -16,12 +39,12 @@ function formatDate(date: Date) {
 
 async function fetchMempoolTransactions(address: string) {
   const result: any[] = [];
-  const initialResponse = await getRequest(`${URL_BASE}/api/address/${address}/txs`);
-  if (initialResponse && initialResponse.length === 0) {
+  const initialResponse: TransactionData[] = await getRequest(`${URL_BASE}/api/address/${address}/txs`);
+  if (initialResponse.length === 0) {
     return result;
   }
 
-  let lastSeenTxid = initialResponse.at(-1).txid;
+  let lastSeenTxid = initialResponse.at(-1)!.txid
   result.push(...initialResponse);
 
   if (result.length < 25) {
