@@ -31,13 +31,30 @@ function sleep(ms: number) {
 
 const buttonText = computed(() => loading.value ? 'Loading...' : 'Export Transaction CSV' );
 
+async function exportCsv() {
+  await sleep(4000);
+  const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+  const data = [
+    ["header1", "header2", "header3"],
+    ["row1col1", "row1col2", "row1col3"],
+    ["row2col1", "row2col2", "row2col3"],
+  ];
+  const csvContent = data.map(row => row.join(",")).join("\n");
+  const blob = new Blob([bom, csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", "data.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+
 async function execMainProcess() {
   loading.value = true;
-  console.log(loading.value);
-  await sleep(5000);
+  await exportCsv()
   loading.value = false;
-  console.log(loading.value);
-  console.log('fire');
 }
 
 </script>
