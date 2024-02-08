@@ -45,6 +45,7 @@ type ExportData = {
   vdiff: number;
   myAddress: '*' | '';
   date: string;
+  description: string;
   inDiff: number;
   outDiffOrFee: number;
   ordContentType: string;
@@ -132,8 +133,8 @@ async function fetchMempoolTransactions(address: string) {
   return result;
 }
 
-const exportDataHeader = () => {
-  const header: ExportData = {
+const initialExportData = (): ExportData => {
+  return {
     timestamp: '',
     txid: '',
     txUrl: '',
@@ -143,14 +144,19 @@ const exportDataHeader = () => {
     vdiff: 0,
     myAddress: '',
     date: '',
+    description: '',
     inDiff: 0,
     outDiffOrFee: 0,
     ordContentType: '',
     ordContentText: '',
     ordInscriptionUrl: '',
   }
+};
+
+const exportDataHeader = () => {
+  const header: ExportData = initialExportData();
   return Object.keys(header);
-}
+};
 
 export const targetMempoolExportData = async (address: string) => {
   const transactions: TransactionData[] = await fetchMempoolTransactions(address);
@@ -209,7 +215,6 @@ const convertToExportData = (transactionData: TransactionData, mainAddress: stri
     const ordContentText = ordContentTextData(txValue.witnessscript);
     const ordInscriptionUrl = ordInscriptionMEUrl(transactionId, txValue.witnessscript);
 
-
     const exportData: ExportData = {
       timestamp: timeStampString,
       txid: transactionId,
@@ -220,17 +225,27 @@ const convertToExportData = (transactionData: TransactionData, mainAddress: stri
       vdiff: diff/SATS_BTC,
       myAddress: myAddress,
       date: date,
+      description: '',
       inDiff: inDiff/SATS_BTC,
       outDiffOrFee: (outDiff - fee)/SATS_BTC,
       ordContentType: ordContentType,
       ordContentText: ordContentText,
       ordInscriptionUrl: ordInscriptionUrl,
     }
+
+    const gasData = initialExportData();
+    gasData.timestamp = timeStampString;
+    gasData.txid = transactionId;
+    gasData.txUrl = txUrl;
+    gasData.address = address;
+    gasData.myAddress = myAddress;
+    gasData.description = `GasFee`;
+    gasData.inDiff = 0;
+    gasData.outDiffOrFee = fee/SATS_BTC;
     
     if (fee > 0 && address === mainAddress && diff < 0) {
-      //const gasDescription = `GasFee: ${description}`;
       result.push(Object.values(exportData));
-      //fileStream.write(`${timeStampString},${txUrl},${address},,,,${myAddress},${date},${gasDescription},${0},${fee/SATS_BTC}\n`);
+      result.push(Object.values(gasData));
     } else {
       result.push(Object.values(exportData));
     }
