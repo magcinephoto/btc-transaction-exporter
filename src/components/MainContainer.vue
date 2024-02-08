@@ -7,7 +7,6 @@
 import { ref } from 'vue';
 import { fetchMEData } from '../lib/magiceden.ts';
 
-
 defineProps<{ msg: string }>();
 
 function execMainProcess() {
