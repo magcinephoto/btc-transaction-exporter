@@ -132,11 +132,30 @@ async function fetchMempoolTransactions(address: string) {
   return result;
 }
 
+const exportDataHeader = () => {
+  const header: ExportData = {
+    timestamp: '',
+    txid: '',
+    txUrl: '',
+    address: '',
+    vin: 0,
+    vout: 0,
+    vdiff: 0,
+    myAddress: '',
+    date: '',
+    inDiff: 0,
+    outDiffOrFee: 0,
+    ordContentType: '',
+    ordContentText: '',
+    ordInscriptionUrl: '',
+  }
+  return Object.keys(header);
+}
+
 export const targetMempoolExportData = async (address: string) => {
   const transactions: TransactionData[] = await fetchMempoolTransactions(address);
-  //const keys = "timestamp,tx,address,vin,vout,diff".split(',')
+  const result: ExportDataCollection = [exportDataHeader()];
 
-  const result: ExportDataCollection = [];
   for (const inputData of transactions) {
     convertToExportData(inputData, address, '', result);
   }
