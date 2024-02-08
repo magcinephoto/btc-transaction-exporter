@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col justify-center items-center m-5">
+    class="flex flex-col justify-center items-center m-8">
 
     <h1 class="text-xl font-medium text-white mb-4">{{ msg }}</h1>
 
