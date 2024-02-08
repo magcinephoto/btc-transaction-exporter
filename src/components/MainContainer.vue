@@ -1,19 +1,43 @@
 <template>
   <div
-    class="flex flex-col justify-center items-center m-8">
+    class="flex flex-col container justify-center items-center my-8 mx-auto">
 
     <h1 class="text-xl font-medium text-white mb-4">{{ msg }}</h1>
 
-    <button
-      :disabled="loading"
-      type="button"
-      @click="execMainProcess"
-      class="flex justify-center bg-slate-700 hover:bg-slate-600 text-white rounded px-6 py-4 focus:outline-none disabled:bg-slate-400 disabled:hover:bg-slate-400 disabled:opacity-75">
-        <div
-          v-if="loading"
-          class="mr-3 animate-spin h-6 w-6 border-2 border-white-500 rounded-full border-t-transparent" />
-        <span>{{ buttonText }}</span>
-    </button>
+    <form class="max-w-md mx-auto">
+      <div class="mb-5">
+        <label for="taproot_address" class="block pl-0 mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">Taproot Address</label>
+        <input
+          v-model="taprootAddress"
+          type="text"
+          id="address"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="bc1p..."
+          required>
+      </div>
+
+      <div class="mb-5">
+        <label for="bitcoin_address" class="block pl-0 mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">Bitcoin Address(optional)</label>
+        <input
+          v-model="bitcoinAddress"
+          type="text"
+          id="address"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="3DG...">
+        <p id="helper-text" class="text-left mt-2 text-sm text-gray-500 dark:text-gray-400">Such as XVerse, the taproot address may differ from the bitcoin address. If they are the same, you do not need to input it.</p>
+      </div>
+
+      <button
+        :disabled="loading"
+        type="button"
+        @click="execMainProcess"
+        class="flex justify-center bg-slate-700 hover:bg-slate-600 text-white rounded px-6 py-4 focus:outline-none disabled:bg-slate-400 disabled:hover:bg-slate-400 disabled:opacity-75">
+          <div
+            v-if="loading"
+            class="mr-3 animate-spin h-6 w-6 border-2 border-white-500 rounded-full border-t-transparent" />
+          <span>{{ buttonText }}</span>
+      </button>
+    </form>
   </div>
 </template>
 
@@ -24,6 +48,8 @@ import { fetchMEData } from '../lib/magiceden.ts';
 defineProps<{ msg: string }>();
 
 const loading = ref(false);
+const taprootAddress = ref('');
+const bitcoinAddress = ref('');
 
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -44,7 +70,7 @@ async function exportCsv() {
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.setAttribute("download", "data.csv");
+  link.setAttribute('download', 'data.csv');
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -53,26 +79,9 @@ async function exportCsv() {
 
 async function execMainProcess() {
   loading.value = true;
-  await exportCsv()
+  //await exportCsv()
+  console.log(taprootAddress.value)
+  console.log(bitcoinAddress.value)
   loading.value = false;
 }
-
 </script>
-
-<style scoped>
-a {
-  color: #42b983;
-}
-
-label {
-  margin: 0 0.5em;
-  font-weight: bold;
-}
-
-code {
-  background-color: #eee;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: #304455;
-}
-</style>
