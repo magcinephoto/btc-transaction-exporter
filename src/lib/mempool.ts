@@ -28,14 +28,14 @@ interface TransactionData {
 
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
-};
+}
 
 function formatDate(date: Date) {
-  let year = date.getFullYear();
-  let month = (date.getMonth() + 1).toString().padStart(2, '0');
-  let day = date.getDate().toString().padStart(2, '0');
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
-};
+}
 
 async function fetchMempoolTransactions(address: string) {
   const result: any[] = [];
@@ -65,7 +65,7 @@ async function fetchMempoolTransactions(address: string) {
   return result;
 }
 
-export const targetMempoolTransactions = async (address: string) => {
+export const targetMempoolTransactionValues = async (address: string) => {
   const transactions = await fetchMempoolTransactions(address);
   const keys = "timestamp,tx,address,vin,vout,diff".split(',')
 
