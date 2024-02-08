@@ -43,8 +43,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { fetchMEData } from '../lib/magiceden.ts';
-import { targetMempoolTransactions } from '../lib/mempool.ts';
+import { fetchMEData } from '../lib/magiceden';
+import { targetMempoolTransactions } from '../lib/mempool';
 
 defineProps<{ msg: string }>();
 
@@ -58,7 +58,7 @@ function sleep(ms: number) {
 
 const buttonText = computed(() => loading.value ? 'Loading...' : 'Export Transaction CSV' );
 
-async function exportCsv(transactions: string[]) {
+async function exportCsv(transactions: string[][]) {
   const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
   const data = transactions;
   const csvContent = data.map(row => row.join(",")).join("\n");
