@@ -13,6 +13,9 @@
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^1.0.14",
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-regular-svg-icons": "^6.5.1",
+    "@fortawesome/vue-fontawesome": "^3.0.6",
     "@types/chrome": "^0.0.260",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
