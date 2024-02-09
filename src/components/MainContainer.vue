@@ -4,35 +4,35 @@
 
     <form class="mx-auto">
       <div class="mb-5">
-        <label for="main_address" class="block pl-0 mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">Main Taproot/Bitcoin Address(Required)</label>
+        <label for="main_address" class="block pl-0 mb-2 text-sm font-medium text-white text-left">Main Taproot/Bitcoin Address(Required)</label>
         <input
           v-model="mainAddress"
           type="text"
           id="main_address"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
           placeholder="bc1p... / 3DG..."
           required>
-          <p id="helper-text" class="text-left mt-2 text-sm text-gray-500 dark:text-gray-400">Enter the address to which you want to export the transaction.</p>
+          <p id="helper-text" class="text-left mt-2 text-sm text-gray-400">Enter the address to which you want to export the transaction.</p>
       </div>
 
       <div class="mb-5">
-        <label for="bitcoin_address" class="block pl-0 mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">Other Bitcoin Address(Optional)</label>
+        <label for="bitcoin_address" class="block pl-0 mb-2 text-sm font-medium text-white text-left">Other Bitcoin Address(Optional)</label>
         <input
           v-model="bitcoinAddress"
           type="text"
           id="bitcoin_address"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
           placeholder="3DG...">
         <p id="helper-text" class="text-left mt-2 text-sm text-gray-500 dark:text-gray-400">Enter if your main address and bitcoin address are different. Such as XVerse, the taproot address may differ from the bitcoin address.</p>
       </div>
 
       <div class="mb-5">
-        <label for="address_alias" class="block pl-0 mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">Address Alias(Optional)</label>
+        <label for="address_alias" class="block pl-0 mb-2 text-sm font-medium text-white text-left">Address Alias(Optional)</label>
         <input
           v-model="addressAlias"
           type="text"
           id="address_alias"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
           placeholder="ex) PersonalWallet, ForCollectArt, ...">
         <p id="helper-text" class="text-left mt-2 text-sm text-gray-500 dark:text-gray-400">Enter if you are managing the address under an alias, e.g., for address purposes</p>
       </div>
