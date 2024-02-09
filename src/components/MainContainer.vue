@@ -4,7 +4,7 @@
 
     <form class="mx-auto">
       <div class="mb-5">
-        <label for="main_address" class="block pl-0 mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">Main Taproot/Bitcoin Address</label>
+        <label for="main_address" class="block pl-0 mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">Main Taproot/Bitcoin Address(Required)</label>
         <input
           v-model="mainAddress"
           type="text"
@@ -102,7 +102,7 @@ async function execMainProcess() {
     loading.value = true;
     const exportDataCollection: ExportDataCollection = await targetMempoolExportData(mainAddress.value);
     await exportCsv(exportDataCollection);
-    flashMessage.value = { type: 'success', text: 'Export succeeded!' }
+    flashMessage.value = { type: 'success', text: `Export succeeded! Filename: ${csvFileName.value}` }
   } catch (error) {
     flashMessage.value = { type: 'error', text: 'An error occurred in export. Please check if the address is correct.' }
     console.log(error);
