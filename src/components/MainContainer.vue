@@ -29,12 +29,19 @@
         :disabled="loading"
         type="button"
         @click="execMainProcess"
-        class="flex justify-center font-medium bg-slate-700 hover:bg-slate-600 text-white rounded px-6 py-4 focus:outline-none disabled:bg-slate-400 disabled:hover:bg-slate-400 disabled:opacity-75">
+        class="flex justify-center font-medium mb-6 bg-slate-700 hover:bg-slate-600 text-white rounded px-6 py-4 focus:outline-none disabled:bg-slate-400 disabled:hover:bg-slate-400 disabled:opacity-75">
           <div
             v-if="loading"
             class="mr-3 animate-spin h-6 w-6 border-2 border-white-500 rounded-full border-t-transparent" />
           <span>{{ buttonText }}</span>
       </button>
+
+      <div
+        v-if="flashMessage"
+        class="text-white text-left p-3 rounded"
+        :class="flashMessage.type === 'error' ? 'bg-rose-600' : 'bg-green-600'">
+        {{ flashMessage.text }}
+      </div>
     </form>
   </div>
 </template>
@@ -45,10 +52,16 @@ import { targetMempoolExportData, ExportDataCollection } from '../lib/mempool';
 
 defineProps<{ msg: string }>();
 
+type FlashMessage = {
+  type: string;
+  text: string;
+};
+
 const loading = ref(false);
 const taprootAddress = ref('');
 const bitcoinAddress = ref('');
 const buttonText = computed(() => loading.value ? 'Loading...' : 'Export Transaction CSV' );
+const flashMessage = ref<FlashMessage>();
 
 async function exportCsv(exportDataCollection: ExportDataCollection) {
   const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
@@ -66,9 +79,16 @@ async function exportCsv(exportDataCollection: ExportDataCollection) {
 }
 
 async function execMainProcess() {
-  loading.value = true;
-  const exportDataCollection: ExportDataCollection = await targetMempoolExportData(taprootAddress.value);
-  await exportCsv(exportDataCollection);
-  loading.value = false;
+  try {
+    loading.value = true;
+    const exportDataCollection: ExportDataCollection = await targetMempoolExportData(taprootAddress.value);
+    await exportCsv(exportDataCollection);
+    flashMessage.value = { type: 'success', text: 'Export succeeded!' }
+  } catch (error) {
+    flashMessage.value = { type: 'error', text: 'An error occurred in export. Please check if the address is correct.' }
+    console.log(error);
+  } finally {
+    loading.value = false;
+  }
 }
 </script>
