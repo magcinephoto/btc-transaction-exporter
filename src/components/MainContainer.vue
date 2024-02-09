@@ -64,7 +64,8 @@
     </form>
 
     <p class="text-sm flex font-medium text-white mb-2">
-      Author: Mag (<a class="underline underline-offset-1" href="https://twitter.com/mag_cinephoto" target="_blank" noreferer noopener>@mag_cinephoto</a>)
+      <font-awesome-icon icon="fa-solid fa-user" class="text-white mr-1" />
+      Mag (<a class="underline underline-offset-1" href="https://twitter.com/mag_cinephoto" target="_blank" noreferer noopener>@mag_cinephoto</a>)
     </p>
     <p class="text-sm flex font-medium text-white mb-2">
       <a class="underline underline-offset-1" href="https://btctransactionexporter.gitbook.io/docs/donate" target="_blank" noreferer noopener>
