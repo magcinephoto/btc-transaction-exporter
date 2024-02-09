@@ -1,7 +1,14 @@
 <template>
   <div class="flex flex-col container justify-center items-center my-8 mx-auto px-5">
-    <h1 class="text-xl font-medium text-white mb-4">{{ msg }}</h1>
+    <h1 class="text-xl flex font-medium text-white mb-4">
+      <span class="mr-3">{{ msg }}</span>
 
+      <a href="https://btctransactionexporter.gitbook.io/docs/" target="_blank" noreferer noopener>
+      <font-awesome-icon
+        icon="fa-regular fa-circle-question"
+        class="text-white text-lg" />
+      </a>
+    </h1>
     <form class="mx-auto">
       <div class="mb-5">
         <label for="main_address" class="block pl-0 mb-2 text-sm font-medium text-white text-left">Main Taproot/Bitcoin Address(Required)</label>
@@ -55,6 +62,16 @@
         {{ flashMessage.text }}
       </div>
     </form>
+
+    <p class="text-sm flex font-medium text-white mb-2">
+      Author: Mag (<a class="underline underline-offset-1" href="https://twitter.com/mag_cinephoto" target="_blank" noreferer noopener>@mag_cinephoto</a>)
+    </p>
+    <p class="text-sm flex font-medium text-white mb-2">
+      <a class="underline underline-offset-1" href="https://btctransactionexporter.gitbook.io/docs/donate" target="_blank" noreferer noopener>
+        <font-awesome-icon icon="fa-solid fa-circle-dollar-to-slot" class="text-white mr-1" />
+        Donate
+      </a>
+    </p>
   </div>
 </template>
 
