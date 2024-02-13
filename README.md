@@ -1,5 +1,13 @@
 # Btc Transaction Exporter
 
+## About
+
+Btc Transaction Exporter is a chrome extension that exports bitcoin transaction history in csv.
+
+Sites such as mempool allow you to view transaction history in your browser, but do not provide the ability to save history.
+
+I have created this EXTENSION to help those who like Bitcoin and Ordinals to enjoy the activity more and save time on administrative work.
+
 ## Usage
 
 See [Documentation](https://btctransactionexporter.gitbook.io/docs)
