@@ -57,7 +57,7 @@
 
       <div
         v-if="flashMessage"
-        class="text-white text-left p-3 rounded"
+        class="text-white text-left p-3 mb-4 rounded"
         :class="flashMessage.type === 'error' ? 'bg-rose-600' : 'bg-green-600'">
         {{ flashMessage.text }}
       </div>
@@ -83,6 +83,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { targetMempoolExportData, ExportDataCollection } from '../lib/mempool';
+import { fetchMagicEdenData } from '../lib/magiceden'
 
 defineProps<{ msg: string }>();
 
@@ -124,6 +125,11 @@ async function execMainProcess() {
     loading.value = true;
     const exportDataCollection: ExportDataCollection = await targetMempoolExportData(mainAddress.value);
     await exportCsv(exportDataCollection);
+
+    // EDIT ME
+    const meData = await fetchMagicEdenData();
+    console.log(meData);
+
     flashMessage.value = { type: 'success', text: `Export succeeded! Filename: ${csvFileName.value}` }
   } catch (error) {
     flashMessage.value = { type: 'error', text: 'An error occurred in export. Please check if the address is correct.' }
