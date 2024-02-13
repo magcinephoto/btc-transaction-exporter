@@ -83,7 +83,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { targetMempoolExportData, ExportDataCollection } from '../lib/mempool';
-import { fetchMagicEdenData } from '../lib/magiceden'
 
 defineProps<{ msg: string }>();
 
@@ -125,10 +124,6 @@ async function execMainProcess() {
     loading.value = true;
     const exportDataCollection: ExportDataCollection = await targetMempoolExportData(mainAddress.value);
     await exportCsv(exportDataCollection);
-
-    // EDIT ME
-    const meData = await fetchMagicEdenData();
-    console.log(meData);
 
     flashMessage.value = { type: 'success', text: `Export succeeded! Filename: ${csvFileName.value}` }
   } catch (error) {

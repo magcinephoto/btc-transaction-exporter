@@ -1,4 +1,5 @@
 import { getRequest } from './client';
+import { fetchMagicEdenData } from '../lib/magiceden'
 
 const URL_BASE = 'https://mempool.space';
 const SATS_BTC = 100000000;
@@ -87,7 +88,7 @@ function ordInscriptionMEUrl(txid: string, witnessscript: string) {
   const contentText = ordEnvelopeText(witnessscript);
   if(contentText === '') return '';
 
-  // TODO: Be avaiable for tparent-child inscription
+  // TODO: Be avaiable for parent-child inscription
   return `https://magiceden.io/ordinals/item-details/${txid}i0`;
 }
 
@@ -159,7 +160,11 @@ const exportDataHeader = () => {
 };
 
 export const targetMempoolExportData = async (address: string) => {
-  const transactions: TransactionData[] = await fetchMempoolTransactions(address);
+  const [transactions, meData] = await Promise.all([
+    fetchMempoolTransactions(address),
+    fetchMagicEdenData()
+  ]);
+
   const result: ExportDataCollection = [exportDataHeader()];
 
   for (const inputData of transactions) {
