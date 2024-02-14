@@ -32,6 +32,22 @@ type txValueByAddress = {
 
 export type ExportDataCollection = (string | number)[][];
 
+type satributeArray = Array<Array<string>>;
+
+const extractAndCombineStrings = (arr: satributeArray) => {
+  return arr.map((subArray: string[]) => subArray.join(' ')).join(' ');
+};
+
+const meDescription = (meActivity?: MeActivity) => {
+  if(!meActivity) return '';
+  const execKind = meActivity.kind ?? '';
+  const collectionName = meActivity.collection.name ?? '';
+  const tokenMetaName = meActivity.token.meta ? meActivity.token.meta.name ?? '' : '';
+  const satributes = meActivity.satributes? extractAndCombineStrings(meActivity.satributes) : '';
+
+  return `${execKind}: ${collectionName} ${tokenMetaName} ${satributes}`;
+};
+
 export const generateExportData = async (address: string) => {
   const [mempoolTransactions, meActivities]: [MempoolTransaction[], MeActivity[]] = await Promise.all([
     fetchMempoolTransactions(address),
@@ -167,11 +183,7 @@ const convertToExportData = (transactionData: MempoolTransaction, meActivities: 
     const ordContentText = ordContentTextData(txValue.witnessscript);
     const ordInscriptionUrl = ordInscriptionMEUrl(transactionId, txValue.witnessscript);
     const meActivity = meActivities.find(elem => elem.txId && elem.txId === transactionId);
-    const collectionName = meActivity ? meActivity.collectionName : '';
-    const tokenMetaName = meActivity ? meActivity.tokenMetaName : '';
-    const execKind = meActivity ? meActivity.kind : '';
-    const satributes = meActivity ? meActivity.satributes : '';
-    const description = `${collectionName} ${tokenMetaName} ${satributes} ${execKind}`;
+    const description = meDescription(meActivity);
 
     const exportData: ExportData = {
       timestamp: timeStampString,

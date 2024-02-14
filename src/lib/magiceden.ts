@@ -44,6 +44,7 @@ export type MeActivity = {
   txBlockTime: string;
   sellerPaymentReceiverAddress: string | null;
   buyerPaymentAddress: string | null;
+  satributes: [];
 };
 
 export const fetchMagicEdenActivities = async (address: string): Promise<MeActivity[]> => {
