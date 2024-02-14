@@ -1,5 +1,5 @@
 import { MEMPOOL_URL_BASE, MempoolTransaction, fetchMempoolTransactions } from './mempool';
-import { fetchMagicEdenTransactions } from './magiceden'; 
+import { fetchMagicEdenActivities } from './magiceden';
 
 const ORD_ENVELOP_HEADER = 'OP_0 OP_IF OP_PUSHBYTES_3 6f7264 OP_PUSHBYTES_1 01';
 const SATS_BTC = 100000000;
@@ -35,7 +35,7 @@ export type ExportDataCollection = (string | number)[][];
 export const generateExportData = async (address: string) => {
   const [transactions, meTransactions] = await Promise.all([
     fetchMempoolTransactions(address),
-    fetchMagicEdenTransactions(address)
+    fetchMagicEdenActivities(address)
   ]);
 
   // TODO: merge csv

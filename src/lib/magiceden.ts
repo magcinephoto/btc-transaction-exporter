@@ -46,30 +46,26 @@ type MeActivity = {
   buyerPaymentAddress: string | null;
 };
 
-export const fetchMagicEdenTransactions = async (address: string): Promise<MeActivity[]> => {
+export const fetchMagicEdenActivities = async (address: string): Promise<MeActivity[]> => {
   let offset = 0;
   const endpoint = `https://api-mainnet.magiceden.io/v2/ord/btc/activities?limit=100&ownerAddress=${address}`;
   const postfix = "&kind[]=buying_broadcasted&kind[]=mint_broadcasted&kind[]=list&kind[]=delist&kind[]=create&kind[]=transfer&kind[]=offer_placed&kind[]=offer_cancelled&kind[]=offer_accepted_broadcasted&kind[]=utxo_invalidated&kind[]=utxo_split_broadcasted&kind[]=utxo_extract_broadcasted";
   let requestUrl = `${endpoint}&offset=${offset}${postfix}`;
-  const transactions: MeActivity[] = [];
+  const activities: MeActivity[] = [];
 
-  try {
-    let response = await getRequest(requestUrl);
-    let activities = response.activities;
+  let response = await getRequest(requestUrl);
+  let activities = response.activities;
 
-    while (activities.length > 0) {
-      transactions.push(...activities);
+  while (activities.length > 0) {
+    activities.push(...activities);
 
-      offset += 100;
-      requestUrl = `${endpoint}&offset=${offset}${postfix}`;
-      await sleep(500);
+    offset += 100;
+    requestUrl = `${endpoint}&offset=${offset}${postfix}`;
+    await sleep(500);
 
-      response = await getRequest(requestUrl);
-      activities = response.activities;
-    }
-  } catch (error) {
-    console.error("Error fetching data:", error);
+    response = await getRequest(requestUrl);
+    activities = response.activities;
   }
 
-  return transactions;
+  return activities;
 }
