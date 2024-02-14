@@ -4,8 +4,8 @@ export const MEMPOOL_URL_BASE = 'https://mempool.space';
 
 type VinElement = {
   prevout: {
-      scriptpubkey_address: string;
-      value: number;
+    scriptpubkey_address: string;
+    value: number;
   };
   inner_witnessscript_asm?: string;
 };

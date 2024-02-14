@@ -32,7 +32,7 @@ type txValueByAddress = {
 
 export type ExportDataCollection = (string | number)[][];
 
-export const targetMempoolExportData = async (address: string) => {
+export const generateExportData = async (address: string) => {
   const [transactions, meTransactions] = await Promise.all([
     fetchMempoolTransactions(address),
     fetchMagicEdenTransactions(address)
@@ -49,8 +49,6 @@ export const targetMempoolExportData = async (address: string) => {
 
   return result;
 }
-
-
 
 function formatDate(date: Date) {
   const year = date.getFullYear();
@@ -97,8 +95,6 @@ function ordEnvelopeText(witnessscript: string) {
 
   return witnessscript.split(ORD_ENVELOP_HEADER)[1]?.trim();
 }
-
-
 
 const initialExportData = (): ExportData => {
   return {

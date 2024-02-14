@@ -82,7 +82,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { targetMempoolExportData, ExportDataCollection } from '../lib/mempool';
+import { generateExportData, ExportDataCollection } from '../lib/mempool';
 
 defineProps<{ msg: string }>();
 
@@ -122,7 +122,7 @@ async function exportCsv(exportDataCollection: ExportDataCollection) {
 async function execMainProcess() {
   try {
     loading.value = true;
-    const exportDataCollection: ExportDataCollection = await targetMempoolExportData(mainAddress.value);
+    const exportDataCollection: ExportDataCollection = await generateExportData(mainAddress.value);
     await exportCsv(exportDataCollection);
 
     flashMessage.value = { type: 'success', text: `Export succeeded! Filename: ${csvFileName.value}` }
