@@ -16,7 +16,8 @@ type ExportData = {
   date: string;
   description: string;
   inDiff: number;
-  outDiffOrFee: number;
+  outDiffWithoutFee: number;
+  fee: number;
   ordInscriptionNumber: string,
   ordContentType: string;
   ordContentText: string;
@@ -120,7 +121,8 @@ const initialExportData = (): ExportData => {
     date: '',
     description: '',
     inDiff: 0,
-    outDiffOrFee: 0,
+    outDiffWithoutFee: 0,
+    fee: 0,
     ordInscriptionNumber: '',
     ordContentType: '',
     ordContentText: '',
@@ -171,9 +173,10 @@ const convertToExportData = (transactionData: MempoolTransaction, meActivities: 
     const txValue = txValues[address];
     const txUrl = `${MEMPOOL_URL_BASE}/tx/${transactionId}`
     const diff = txValue.vout - txValue.vin;
+    const fee = gasFee;
     const inDiff = diff >= 0 ? diff : 0;
     const outDiff = diff < 0 ? Math.abs(diff) : 0;
-    const fee = gasFee;
+    const outDiffWithoutFee = inDiff > 0 ? 0 : Math.abs(outDiff - fee)/SATS_BTC;
     const myAddress = ownAddresses.includes(address) ? '*' : '';
     const ordContentText = ordContentTextData(txValue.witnessscript);
     const meActivity = meActivities.find(elem => elem.txId && elem.txId === transactionId);
@@ -194,7 +197,8 @@ const convertToExportData = (transactionData: MempoolTransaction, meActivities: 
       date: date,
       description: description,
       inDiff: inDiff/SATS_BTC,
-      outDiffOrFee: (outDiff - fee)/SATS_BTC,
+      outDiffWithoutFee: outDiffWithoutFee,
+      fee: 0,
       ordInscriptionNumber: ordInscriptionNumber,
       ordContentType: ordContentType,
       ordContentText: ordContentText,
@@ -207,11 +211,13 @@ const convertToExportData = (transactionData: MempoolTransaction, meActivities: 
     gasData.txUrl = txUrl;
     gasData.address = address;
     gasData.myAddress = myAddress;
+    gasData.date = date;
     gasData.description = `GasFee`;
     gasData.inDiff = 0;
-    gasData.outDiffOrFee = fee/SATS_BTC;
+    gasData.outDiffWithoutFee = 0;
+    gasData.fee = fee/SATS_BTC;
     
-    if (fee > 0 && address === mainAddress && diff < 0) {
+    if (diff < 0) {
       result.push(Object.values(exportData));
       result.push(Object.values(gasData));
     } else {
