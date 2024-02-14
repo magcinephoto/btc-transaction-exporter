@@ -8,3 +8,7 @@ export const getRequest = async (url: string) => {
     console.error(error);
   }
 };
+
+export const sleep = (ms: number) => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};

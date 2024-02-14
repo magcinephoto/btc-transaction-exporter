@@ -1,5 +1,5 @@
-import { getRequest } from './client';
-import { fetchMagicEdenData } from '../lib/magiceden'
+import { getRequest, sleep } from './client';
+import { fetchMagicEdenTransactions } from '../lib/magiceden'
 
 const URL_BASE = 'https://mempool.space';
 const SATS_BTC = 100000000;
@@ -55,10 +55,6 @@ type ExportData = {
 };
 
 export type ExportDataCollection = (string | number)[][];
-
-function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 function formatDate(date: Date) {
   const year = date.getFullYear();
@@ -160,10 +156,13 @@ const exportDataHeader = () => {
 };
 
 export const targetMempoolExportData = async (address: string) => {
-  const [transactions, meData] = await Promise.all([
+  const [transactions, meTransactions] = await Promise.all([
     fetchMempoolTransactions(address),
-    fetchMagicEdenData()
+    fetchMagicEdenTransactions(address)
   ]);
+
+  // TODO: merge csv
+  console.log(meTransactions);
 
   const result: ExportDataCollection = [exportDataHeader()];
 
