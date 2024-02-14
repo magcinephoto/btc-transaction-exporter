@@ -73,8 +73,7 @@
     </p>
     <p class="text-sm flex font-medium text-white mb-2">
       <a class="underline underline-offset-1" href="https://btctransactionexporter.gitbook.io/docs/donate" target="_blank" noreferer noopener>
-        <font-awesome-icon icon="fa-solid fa-circle-dollar-to-slot" class="text-white mr-1" />
-        Donate
+        <font-awesome-icon icon="fa-solid fa-circle-dollar-to-slot" class="text-white mr-1" />Donate
       </a>
     </p>
   </div>
