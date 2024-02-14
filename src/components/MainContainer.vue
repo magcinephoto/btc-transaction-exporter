@@ -121,7 +121,7 @@ async function exportCsv(exportDataCollection: ExportDataCollection) {
 
 async function execMainProcess() {
   try {
-    flashMessage.value = {}
+    flashMessage.value = undefined;
     loading.value = true;
     const exportDataCollection: ExportDataCollection = await generateExportData(mainAddress.value);
     await exportCsv(exportDataCollection);
