@@ -9,7 +9,7 @@
         class="text-white text-lg" />
       </a>
     </h1>
-    <form class="mx-auto">
+    <form class="container mx-auto">
       <div class="mb-5">
         <label for="main_address" class="block pl-0 mb-2 text-sm font-medium text-white text-left">Main Taproot/Bitcoin Address(Required)</label>
         <input
@@ -19,7 +19,6 @@
           class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
           placeholder="bc1p... / 3DG..."
           required>
-          <p id="helper-text" class="text-left mt-2 text-sm text-gray-400">Enter the address to which you want to export the transaction.</p>
       </div>
 
       <div class="mb-5">
@@ -30,7 +29,6 @@
           id="bitcoin_address"
           class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
           placeholder="3DG...">
-        <p id="helper-text" class="text-left mt-2 text-sm text-gray-500 dark:text-gray-400">Enter if your main address and bitcoin address are different. Such as XVerse, the taproot address may differ from the bitcoin address.</p>
       </div>
 
       <div class="mb-5">
@@ -41,7 +39,6 @@
           id="address_alias"
           class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
           placeholder="ex) PersonalWallet, ForCollectArt, ...">
-        <p id="helper-text" class="text-left mt-2 text-sm text-gray-500 dark:text-gray-400">Enter if you are managing the address under an alias, e.g., for address purposes</p>
       </div>
 
       <button
