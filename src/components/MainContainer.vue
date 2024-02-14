@@ -16,7 +16,8 @@
           v-model="mainAddress"
           type="text"
           id="main_address"
-          class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+          class="border text-sm rounded-lg block w-full p-2.5 text-white focus:ring-blue-500 focus:border-blue-500"
+          :class="inputValid ? 'bg-gray-700 border-gray-600 placeholder-gray-400' : 'bg-red-500 border-red-600 placeholder-red-200'"
           placeholder="bc1p... / 3DG..."
           required>
       </div>
@@ -91,6 +92,7 @@ const loading = ref(false);
 const mainAddress = ref('');
 const bitcoinAddress = ref('');
 const addressAlias = ref('');
+const inputValid = ref(true);
 const buttonText = computed(() => loading.value ? 'Exporting...' : 'Export Transaction CSV' );
 const flashMessage = ref<FlashMessage>();
 
@@ -116,12 +118,18 @@ async function exportCsv(exportDataCollection: ExportDataCollection) {
 }
 
 async function execMainProcess() {
+  if(!mainAddress.value) {
+    inputValid.value = false;
+    flashMessage.value = { type: 'error', text: 'Main address is required' }
+    return;
+  }
+
   try {
+    inputValid.value = true;
     flashMessage.value = undefined;
     loading.value = true;
     const exportDataCollection: ExportDataCollection = await generateExportData(mainAddress.value);
     await exportCsv(exportDataCollection);
-
     flashMessage.value = { type: 'success', text: `Export succeeded! Filename: ${csvFileName.value}` }
   } catch (error) {
     flashMessage.value = { type: 'error', text: 'An error occurred in export. Please check if the address is correct.' }
