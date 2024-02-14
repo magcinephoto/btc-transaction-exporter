@@ -17,6 +17,7 @@ type ExportData = {
   description: string;
   inDiff: number;
   outDiffOrFee: number;
+  ordInscriptionNumber: string,
   ordContentType: string;
   ordContentText: string;
   ordInscriptionUrl: string;
@@ -120,6 +121,7 @@ const initialExportData = (): ExportData => {
     description: '',
     inDiff: 0,
     outDiffOrFee: 0,
+    ordInscriptionNumber: '',
     ordContentType: '',
     ordContentText: '',
     ordInscriptionUrl: '',
@@ -178,6 +180,7 @@ const convertToExportData = (transactionData: MempoolTransaction, meActivities: 
     const ordInscriptionUrl = ordInscriptionMeUrl(meActivity);
     const description = meDescription(meActivity);
     const ordContentType = meActivity && meActivity.token ? meActivity.token.contentType : '';
+    const ordInscriptionNumber = meActivity && meActivity.token ? meActivity.token.inscriptionNumber : '';
 
     const exportData: ExportData = {
       timestamp: timeStampString,
@@ -192,6 +195,7 @@ const convertToExportData = (transactionData: MempoolTransaction, meActivities: 
       description: description,
       inDiff: inDiff/SATS_BTC,
       outDiffOrFee: (outDiff - fee)/SATS_BTC,
+      ordInscriptionNumber: ordInscriptionNumber,
       ordContentType: ordContentType,
       ordContentText: ordContentText,
       ordInscriptionUrl: ordInscriptionUrl,
