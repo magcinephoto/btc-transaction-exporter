@@ -95,7 +95,7 @@ const loading = ref(false);
 const mainAddress = ref('');
 const bitcoinAddress = ref('');
 const addressAlias = ref('');
-const buttonText = computed(() => loading.value ? 'Loading...' : 'Export Transaction CSV' );
+const buttonText = computed(() => loading.value ? 'Exporting...' : 'Export Transaction CSV' );
 const flashMessage = ref<FlashMessage>();
 
 const csvFileName = computed(() => {
@@ -121,6 +121,7 @@ async function exportCsv(exportDataCollection: ExportDataCollection) {
 
 async function execMainProcess() {
   try {
+    flashMessage.value = {}
     loading.value = true;
     const exportDataCollection: ExportDataCollection = await generateExportData(mainAddress.value);
     await exportCsv(exportDataCollection);
