@@ -55,8 +55,8 @@
 
       <div
         v-if="flashMessage"
-        class="text-white text-left p-3 mb-4 rounded"
-        :class="flashMessage.type === 'error' ? 'bg-rose-600' : 'bg-green-600'">
+        class="text-white text-left p-3 mb-4 rounded break-all"
+        :class="flashMessage.type === 'error' ? 'bg-red-500' : 'bg-green-600'">
         {{ flashMessage.text }}
       </div>
     </form>
