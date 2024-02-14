@@ -25,7 +25,7 @@ type MeToken = {
   domain: null;
 };
 
-type MeActivity = {
+export type MeActivity = {
   kind: string;
   tokenId: string;
   chain: string;
@@ -51,13 +51,13 @@ export const fetchMagicEdenActivities = async (address: string): Promise<MeActiv
   const endpoint = `https://api-mainnet.magiceden.io/v2/ord/btc/activities?limit=100&ownerAddress=${address}`;
   const postfix = "&kind[]=buying_broadcasted&kind[]=mint_broadcasted&kind[]=list&kind[]=delist&kind[]=create&kind[]=transfer&kind[]=offer_placed&kind[]=offer_cancelled&kind[]=offer_accepted_broadcasted&kind[]=utxo_invalidated&kind[]=utxo_split_broadcasted&kind[]=utxo_extract_broadcasted";
   let requestUrl = `${endpoint}&offset=${offset}${postfix}`;
-  const activities: MeActivity[] = [];
+  const results: MeActivity[] = [];
 
   let response = await getRequest(requestUrl);
   let activities = response.activities;
 
   while (activities.length > 0) {
-    activities.push(...activities);
+    results.push(...activities);
 
     offset += 100;
     requestUrl = `${endpoint}&offset=${offset}${postfix}`;
@@ -67,5 +67,5 @@ export const fetchMagicEdenActivities = async (address: string): Promise<MeActiv
     activities = response.activities;
   }
 
-  return activities;
+  return results;
 }

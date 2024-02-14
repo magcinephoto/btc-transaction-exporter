@@ -1,5 +1,5 @@
 import { MEMPOOL_URL_BASE, MempoolTransaction, fetchMempoolTransactions } from './mempool';
-import { fetchMagicEdenActivities } from './magiceden';
+import { MeActivity, fetchMagicEdenActivities } from './magiceden';
 
 const ORD_ENVELOP_HEADER = 'OP_0 OP_IF OP_PUSHBYTES_3 6f7264 OP_PUSHBYTES_1 01';
 const SATS_BTC = 100000000;
@@ -33,18 +33,18 @@ type txValueByAddress = {
 export type ExportDataCollection = (string | number)[][];
 
 export const generateExportData = async (address: string) => {
-  const [transactions, meTransactions] = await Promise.all([
+  const [transactions, meActivities]: [MempoolTransaction[], MeActivity[]] = await Promise.all([
     fetchMempoolTransactions(address),
     fetchMagicEdenActivities(address)
   ]);
 
   // TODO: merge csv
-  console.log(meTransactions);
+  console.log(meActivities);
 
   const result: ExportDataCollection = [exportDataHeader()];
 
   for (const inputData of transactions) {
-    convertToExportData(inputData, address, '', result);
+    convertToExportData(inputData, meActivities, address, '', result);
   }
 
   return result;
@@ -121,7 +121,7 @@ const exportDataHeader = () => {
   return Object.keys(header);
 };
 
-const convertToExportData = (transactionData: MempoolTransaction, mainAddress: string, subAddress: string, result: ExportDataCollection) => {
+const convertToExportData = (transactionData: MempoolTransaction, meActivities: MeActivity[], mainAddress: string, subAddress: string, result: ExportDataCollection) => {
   const transactionId = transactionData.txid;
   const gasFee = transactionData.fee;
   const blockTime = transactionData.status.block_time;
@@ -166,6 +166,12 @@ const convertToExportData = (transactionData: MempoolTransaction, mainAddress: s
     const ordContentType = ordContentTypeText(txValue.witnessscript);
     const ordContentText = ordContentTextData(txValue.witnessscript);
     const ordInscriptionUrl = ordInscriptionMEUrl(transactionId, txValue.witnessscript);
+    const meActivity = meActivities.find(elem => elem.txId && elem.txId === transactionId);
+    const collectionName = meActivity ? meActivity.collectionName : '';
+    const tokenMetaName = meActivity ? meActivity.tokenMetaName : '';
+    const execKind = meActivity ? meActivity.kind : '';
+    const satributes = meActivity ? meActivity.satributes : '';
+    const description = `${collectionName} ${tokenMetaName} ${satributes} ${execKind}`;
 
     const exportData: ExportData = {
       timestamp: timeStampString,
@@ -177,7 +183,7 @@ const convertToExportData = (transactionData: MempoolTransaction, mainAddress: s
       vdiff: diff/SATS_BTC,
       myAddress: myAddress,
       date: date,
-      description: '',
+      description: description,
       inDiff: inDiff/SATS_BTC,
       outDiffOrFee: (outDiff - fee)/SATS_BTC,
       ordContentType: ordContentType,

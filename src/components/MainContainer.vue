@@ -82,7 +82,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { generateExportData, ExportDataCollection } from '../lib/mempool';
+import { generateExportData, ExportDataCollection } from '../lib/export';
 
 defineProps<{ msg: string }>();
 
