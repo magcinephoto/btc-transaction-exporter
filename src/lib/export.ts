@@ -33,7 +33,7 @@ type txValueByAddress = {
 export type ExportDataCollection = (string | number)[][];
 
 export const generateExportData = async (address: string) => {
-  const [transactions, meActivities]: [MempoolTransaction[], MeActivity[]] = await Promise.all([
+  const [mempoolTransactions, meActivities]: [MempoolTransaction[], MeActivity[]] = await Promise.all([
     fetchMempoolTransactions(address),
     fetchMagicEdenActivities(address)
   ]);
@@ -43,7 +43,7 @@ export const generateExportData = async (address: string) => {
 
   const result: ExportDataCollection = [exportDataHeader()];
 
-  for (const inputData of transactions) {
+  for (const inputData of mempoolTransactions) {
     convertToExportData(inputData, meActivities, address, '', result);
   }
 
