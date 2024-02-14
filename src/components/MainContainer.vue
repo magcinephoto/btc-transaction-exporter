@@ -46,7 +46,7 @@
         :disabled="loading"
         type="button"
         @click="execMainProcess"
-        class="flex justify-center font-medium mb-6 bg-slate-700 hover:bg-slate-600 text-white rounded px-6 py-4 focus:outline-none disabled:bg-slate-400 disabled:hover:bg-slate-400 disabled:opacity-75">
+        class="flex justify-center text-sm font-medium mb-6 bg-slate-700 hover:bg-slate-600 text-white rounded px-6 py-4 focus:outline-none disabled:bg-slate-400 disabled:hover:bg-slate-400 disabled:opacity-75">
           <div
             v-if="loading"
             class="mr-3 animate-spin h-6 w-6 border-2 border-white-500 rounded-full border-t-transparent" />
