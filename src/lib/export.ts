@@ -54,9 +54,6 @@ export const generateExportData = async (address: string) => {
     fetchMagicEdenActivities(address)
   ]);
 
-  // TODO: merge csv
-  console.log(meActivities);
-
   const result: ExportDataCollection = [exportDataHeader()];
 
   for (const inputData of mempoolTransactions) {
@@ -176,11 +173,11 @@ const convertToExportData = (transactionData: MempoolTransaction, meActivities: 
     const outDiff = diff < 0 ? Math.abs(diff) : 0;
     const fee = gasFee;
     const myAddress = ownAddresses.includes(address) ? '*' : '';
-    const ordContentType = ordContentTypeText(txValue.witnessscript);
     const ordContentText = ordContentTextData(txValue.witnessscript);
     const meActivity = meActivities.find(elem => elem.txId && elem.txId === transactionId);
     const ordInscriptionUrl = ordInscriptionMeUrl(meActivity);
     const description = meDescription(meActivity);
+    const ordContentType = meActivity && meActivity.token ? meActivity.token.contentType : '';
 
     const exportData: ExportData = {
       timestamp: timeStampString,
