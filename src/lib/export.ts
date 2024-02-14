@@ -90,12 +90,9 @@ function ordContentTextData(witnessscript: string) {
   return `"${hexToUtf8(ordContentTextRaw).replace(/"/g, '""')}"`;
 }
 
-function ordInscriptionMEUrl(txid: string, witnessscript: string) {
-  const contentText = ordEnvelopeText(witnessscript);
-  if(contentText === '') return '';
-
-  // TODO: Be avaiable for parent-child inscription
-  return `https://magiceden.io/ordinals/item-details/${txid}i0`;
+function ordInscriptionMeUrl(meActivity?: MeActivity) {
+  if(!meActivity) return '';
+  return `https://magiceden.io/ordinals/item-details/${meActivity.tokenId}`;
 }
 
 function ordContentTypeText(witnessscript: string) {
@@ -181,8 +178,8 @@ const convertToExportData = (transactionData: MempoolTransaction, meActivities: 
     const myAddress = ownAddresses.includes(address) ? '*' : '';
     const ordContentType = ordContentTypeText(txValue.witnessscript);
     const ordContentText = ordContentTextData(txValue.witnessscript);
-    const ordInscriptionUrl = ordInscriptionMEUrl(transactionId, txValue.witnessscript);
     const meActivity = meActivities.find(elem => elem.txId && elem.txId === transactionId);
+    const ordInscriptionUrl = ordInscriptionMeUrl(meActivity);
     const description = meDescription(meActivity);
 
     const exportData: ExportData = {
