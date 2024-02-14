@@ -45,9 +45,9 @@ const meDescription = (meActivity?: MeActivity) => {
   const execKind = meActivity.kind ?? '';
   const collectionName = meActivity.collection.name ?? '';
   const tokenMetaName = meActivity.token.meta ? meActivity.token.meta.name ?? '' : '';
-  const satributes = meActivity.satributes? extractAndCombineStrings(meActivity.satributes) : '';
+  const satributes = meActivity.satributes ? extractAndCombineStrings(meActivity.satributes) : '';
 
-  return `${execKind}: ${collectionName} ${tokenMetaName} ${satributes}`;
+  return `${execKind} inscription ${collectionName} ${tokenMetaName} ${satributes}`;
 };
 
 export const generateExportData = async (address: string) => {
@@ -212,7 +212,7 @@ const convertToExportData = (transactionData: MempoolTransaction, meActivities: 
     gasData.address = address;
     gasData.myAddress = myAddress;
     gasData.date = date;
-    gasData.description = `GasFee`;
+    gasData.description = `GasFee: ${address}`;
     gasData.inDiff = 0;
     gasData.outDiffWithoutFee = 0;
     gasData.fee = fee/SATS_BTC;
