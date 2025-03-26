@@ -3,7 +3,7 @@
   "name": "Btc Transaction Exporter",
   "description": "Export csv bitcoin transactions of specific wallet address",
   "host_permissions": ["https://api-mainnet.magiceden.io/"],
-  "version": "1.0.1",
+  "version": "1.0.2",
   "icons": {
     "16": "images/icon16.png",
     "32": "images/icon32.png",
